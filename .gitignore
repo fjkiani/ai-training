@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual envs
+.venv/
+venv/
+env/
+
+# Data / datasets (large, regenerated or downloaded)
+data/
+datasets/
+outputs/
+checkpoints/
+
+# Gradio
+flagged/
+gradio_cached_examples/
+
+# IDE
+.idea/
+.vscode/
+.cursor/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+wandb/
+
+# Note: model checkpoints (*.pth, *.pkl) in domains/*/models/ ARE committed
+# so demos work out of the box. Data directories are excluded (regenerated).
