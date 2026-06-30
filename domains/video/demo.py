@@ -85,6 +85,7 @@ def build_demo() -> gr.Interface:
             "using CLIP zero-shot classification. Upload a short video to see results."
         ),
         examples=_get_examples(),
+        cache_examples=False,
     )
 
 

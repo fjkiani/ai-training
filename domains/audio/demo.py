@@ -79,6 +79,7 @@ def build_demo() -> gr.Interface:
             "Upload an audio file to see the waveform, mel-spectrogram, and predicted class."
         ),
         examples=_get_examples(),
+        cache_examples=False,
     )
 
 

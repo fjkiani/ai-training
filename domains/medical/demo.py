@@ -75,6 +75,7 @@ def build_demo() -> gr.Interface:
             "Upload a radiograph to see the predicted class and confidence."
         ),
         examples=_get_examples(),
+        cache_examples=False,
     )
 
 

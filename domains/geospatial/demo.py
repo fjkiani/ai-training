@@ -70,6 +70,7 @@ def build_demo() -> gr.Interface:
             "Upload a 256x256 satellite-like image to see the predicted segmentation mask."
         ),
         examples=_get_examples(),
+        cache_examples=False,
     )
 
 
