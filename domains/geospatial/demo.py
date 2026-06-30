@@ -60,7 +60,7 @@ def build_demo() -> gr.Interface:
             "A U-Net (ResNet18 encoder) trained on synthetic land/water tiles. "
             "Upload a 256x256 satellite-like image to see the predicted segmentation mask."
         ),
-        allow_flagging="never",
+        
     )
 
 

@@ -75,7 +75,7 @@ def build_demo() -> gr.Interface:
             "Detects scenes using PySceneDetect, extracts keyframes, and tags them "
             "using CLIP zero-shot classification. Upload a short video to see results."
         ),
-        allow_flagging="never",
+        
     )
 
 

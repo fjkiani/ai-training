@@ -66,7 +66,7 @@ def build_demo() -> gr.Interface:
             "Upload a radiograph to see the predicted class and confidence."
         ),
         examples=None,
-        allow_flagging="never",
+        
     )
 
 

@@ -69,7 +69,7 @@ def build_demo() -> gr.Interface:
             "A Random Forest classifier trained on ESC-50 (50 environmental sound classes). "
             "Upload an audio file to see the waveform, mel-spectrogram, and predicted class."
         ),
-        allow_flagging="never",
+        
     )
 
 
