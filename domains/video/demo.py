@@ -20,6 +20,7 @@ from .infer import analyze_video
 
 HERE = Path(__file__).parent
 OUTPUT_DIR = HERE / "outputs"
+SAMPLES_DIR = HERE / "samples"
 
 
 def run_inference(video_path):
@@ -65,6 +66,14 @@ def run_inference(video_path):
     return fig, summary
 
 
+def _get_examples():
+    """Return list of sample video paths, or None if samples don't exist."""
+    if not SAMPLES_DIR.exists():
+        return None
+    samples = sorted(SAMPLES_DIR.glob("*.mp4"))
+    return [[str(s)] for s in samples] if samples else None
+
+
 def build_demo() -> gr.Interface:
     return gr.Interface(
         fn=run_inference,
@@ -75,7 +84,7 @@ def build_demo() -> gr.Interface:
             "Detects scenes using PySceneDetect, extracts keyframes, and tags them "
             "using CLIP zero-shot classification. Upload a short video to see results."
         ),
-        
+        examples=_get_examples(),
     )
 
 

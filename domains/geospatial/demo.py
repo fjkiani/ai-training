@@ -20,6 +20,7 @@ from .infer import predict_tile
 
 HERE = Path(__file__).parent
 CKPT = HERE / "models" / "geo_unet.pth"
+SAMPLES_DIR = HERE / "samples"
 
 
 def run_inference(image):
@@ -50,6 +51,14 @@ def run_inference(image):
     return fig, summary
 
 
+def _get_examples():
+    """Return list of sample image paths, or None if samples don't exist."""
+    if not SAMPLES_DIR.exists():
+        return None
+    samples = sorted(SAMPLES_DIR.glob("*.png"))
+    return [[str(s)] for s in samples] if samples else None
+
+
 def build_demo() -> gr.Interface:
     return gr.Interface(
         fn=run_inference,
@@ -60,7 +69,7 @@ def build_demo() -> gr.Interface:
             "A U-Net (ResNet18 encoder) trained on synthetic land/water tiles. "
             "Upload a 256x256 satellite-like image to see the predicted segmentation mask."
         ),
-        
+        examples=_get_examples(),
     )
 
 

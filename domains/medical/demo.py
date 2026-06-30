@@ -24,6 +24,7 @@ from .pipeline import preprocess_2d_image
 
 HERE = Path(__file__).parent
 CKPT = HERE / "models" / "medical_unet.pth"
+SAMPLES_DIR = HERE / "samples"
 
 
 def run_inference(image):
@@ -54,6 +55,14 @@ def run_inference(image):
     return fig, summary
 
 
+def _get_examples():
+    """Return list of sample image paths, or None if samples don't exist."""
+    if not SAMPLES_DIR.exists():
+        return None
+    samples = sorted(SAMPLES_DIR.glob("*.jpeg"))
+    return [[str(s)] for s in samples] if samples else None
+
+
 def build_demo() -> gr.Interface:
     return gr.Interface(
         fn=run_inference,
@@ -62,11 +71,10 @@ def build_demo() -> gr.Interface:
         title="Medical Imaging — MedNIST Classifier",
         description=(
             "A MONAI U-Net classifier trained on MedNIST (6 radiograph classes: "
-            "AbdomenCT, BreastMLO, CXR, ChestCT, Hand, HeadCT). "
+            "AbdomenCT, BreastMRI, CXR, ChestCT, Hand, HeadCT). "
             "Upload a radiograph to see the predicted class and confidence."
         ),
-        examples=None,
-        
+        examples=_get_examples(),
     )
 
 

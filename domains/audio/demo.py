@@ -23,6 +23,7 @@ from .pipeline import load_audio, get_mel_spectrogram_image
 HERE = Path(__file__).parent
 CKPT = HERE / "models" / "audio_rf.pkl"
 LE = HERE / "models" / "label_encoder.pkl"
+SAMPLES_DIR = HERE / "samples"
 
 
 def run_inference(audio_path):
@@ -55,6 +56,14 @@ def run_inference(audio_path):
     return fig1, fig2, summary
 
 
+def _get_examples():
+    """Return list of sample audio paths, or None if samples don't exist."""
+    if not SAMPLES_DIR.exists():
+        return None
+    samples = sorted(SAMPLES_DIR.glob("*.wav"))
+    return [[str(s)] for s in samples] if samples else None
+
+
 def build_demo() -> gr.Interface:
     return gr.Interface(
         fn=run_inference,
@@ -69,7 +78,7 @@ def build_demo() -> gr.Interface:
             "A Random Forest classifier trained on ESC-50 (50 environmental sound classes). "
             "Upload an audio file to see the waveform, mel-spectrogram, and predicted class."
         ),
-        
+        examples=_get_examples(),
     )
 
 
