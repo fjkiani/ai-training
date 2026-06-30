@@ -7,6 +7,7 @@ Run locally:
 """
 from __future__ import annotations
 
+import io
 from pathlib import Path
 
 import gradio as gr
@@ -16,6 +17,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import librosa
 import librosa.display
+from PIL import Image
 
 from .infer import predict
 from .pipeline import load_audio, get_mel_spectrogram_image
@@ -24,6 +26,16 @@ HERE = Path(__file__).parent
 CKPT = HERE / "models" / "audio_rf.pkl"
 LE = HERE / "models" / "label_encoder.pkl"
 SAMPLES_DIR = HERE / "samples"
+
+
+def _fig_to_pil(fig) -> Image.Image:
+    """Render a matplotlib Figure to a PIL Image for Gradio v6 compatibility."""
+    buf = io.BytesIO()
+    fig.savefig(buf, format="png", dpi=110, bbox_inches="tight")
+    buf.seek(0)
+    img = Image.open(buf).copy()
+    plt.close(fig)
+    return img
 
 
 def run_inference(audio_path):
@@ -53,7 +65,7 @@ def run_inference(audio_path):
     summary = f"Predicted: {result['predicted_class']} ({result['confidence']:.1%})\n\nTop-5:\n"
     for name, prob in result["top5"]:
         summary += f"  {name}: {prob:.1%}\n"
-    return fig1, fig2, summary
+    return _fig_to_pil(fig1), _fig_to_pil(fig2), summary
 
 
 def _get_examples():

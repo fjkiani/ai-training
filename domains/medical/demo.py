@@ -10,6 +10,7 @@ Deploy to HuggingFace Spaces:
 """
 from __future__ import annotations
 
+import io
 from pathlib import Path
 
 import gradio as gr
@@ -17,6 +18,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
+from PIL import Image
 
 from .infer import predict
 from .model import MEDNIST_CLASSES
@@ -25,6 +27,16 @@ from .pipeline import preprocess_2d_image
 HERE = Path(__file__).parent
 CKPT = HERE / "models" / "medical_unet.pth"
 SAMPLES_DIR = HERE / "samples"
+
+
+def _fig_to_pil(fig) -> Image.Image:
+    """Render a matplotlib Figure to a PIL Image for Gradio v6 compatibility."""
+    buf = io.BytesIO()
+    fig.savefig(buf, format="png", dpi=110, bbox_inches="tight")
+    buf.seek(0)
+    img = Image.open(buf).copy()
+    plt.close(fig)
+    return img
 
 
 def run_inference(image):
@@ -52,7 +64,7 @@ def run_inference(image):
 
     import json
     summary = json.dumps(result, indent=2)
-    return fig, summary
+    return _fig_to_pil(fig), summary
 
 
 def _get_examples():

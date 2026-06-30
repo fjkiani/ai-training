@@ -7,6 +7,7 @@ Run locally:
 """
 from __future__ import annotations
 
+import io
 from pathlib import Path
 
 import gradio as gr
@@ -21,6 +22,16 @@ from .infer import analyze_video
 HERE = Path(__file__).parent
 OUTPUT_DIR = HERE / "outputs"
 SAMPLES_DIR = HERE / "samples"
+
+
+def _fig_to_pil(fig) -> Image.Image:
+    """Render a matplotlib Figure to a PIL Image for Gradio v6 compatibility."""
+    buf = io.BytesIO()
+    fig.savefig(buf, format="png", dpi=110, bbox_inches="tight")
+    buf.seek(0)
+    img = Image.open(buf).copy()
+    plt.close(fig)
+    return img
 
 
 def run_inference(video_path):
@@ -63,7 +74,7 @@ def run_inference(video_path):
         for i, c in enumerate(classifications[:10]):
             top_label, top_score = c["labels"][0]
             summary += f"  Scene {i+1}: {top_label} ({top_score:.1%})\n"
-    return fig, summary
+    return _fig_to_pil(fig), summary
 
 
 def _get_examples():
